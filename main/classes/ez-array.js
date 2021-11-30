@@ -5,7 +5,7 @@ class EzArray extends form Array{
   }
 
   get last(){
-    return this[this.lenght - 1];
+    return this[this.length - 1];
   }
 
 }
