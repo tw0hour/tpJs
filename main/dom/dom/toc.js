@@ -1,28 +1,26 @@
-const body = document.querySelector("body");
-const firstChildTagName = body.firstElementChild.tagName;
+var toc = "";
+var level = 0;
 
-const ol = document.createElement("ol");
-body.appendChild(ol);
+const regex = /<h([\d]).*?>([^<]+)<\/h[\d]>/gi;
+const str = document.getElementsByTagName("body")[0].innerHTML;
+let m;
 
-childs = Array.from(body.childNodes);
-
-
-for(child of childs){
-    //console.log(child);
-
-    if(child.tagName===firstChildTagName){
-        //const li = document.createElement("li");
-        elements = document.querySelectorAll(child.tagName);
-        console.log(elements);
-        elements.foreEach(e=>{
-            ol.appendChild(e);
-        });
-
-        
+while ((m = regex.exec(str)) !== null) {
+    if (m.index === regex.lastIndex) {
+        regex.lastIndex++;
     }
 
-    
+    if (m[1] > level) {
+        toc += (new Array(m[1]  - level + 1)).join("<ul>");
+    } else if (m[1]  < level) {
+        toc += (new Array(level - m[1]  + 1)).join("</ul>");
+    }
+
+    level = parseInt(m[1] );
+
+    toc += "<li>" + m[2]  + "</li>";
 }
-
-
-///<h1>(.*?)</h1>/<li>$1</li>/gm
+if (level) {
+    toc += (new Array(level + 1)).join("</ul>");
+}
+document.getElementsByTagName("body")[0].insertAdjacentHTML('afterbegin',toc +'<br>');
